@@ -66,9 +66,3 @@ describe "Associations — Song and Genre:" do
     end
   end
 end
-        expect_any_instance_of(Song).to receive(:genre=).with(genre)
-        Song.new("In the Aeroplane Over the Sea", artist, genre)
-      end
-    end
-  end
-end
