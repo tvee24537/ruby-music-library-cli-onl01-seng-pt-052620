@@ -1,22 +1,15 @@
 require "spec_helper"
 
 describe "Associations — Song and Genre:" do
-  let(:song) { Song.new("In the Aeroplane Over the Sea") }
+  let(:song) { Song.create("In the Aeroplane Over the Sea") }
   let(:genre) { Genre.new("indie rock") }
 
   context "Genre" do
-    describe "#initialize" do
-      it "creates a 'songs' property set to an empty array (genre has many songs)" do
-        expect(genre.instance_variable_defined?(:@songs)).to be(true)
-        expect(genre.instance_variable_get(:@songs)).to eq([])
-      end
-    end
-
     describe "#songs" do
       it "returns the genre's 'songs' collection (genre has many songs)" do
         expect(genre.songs).to eq([])
 
-        genre.songs << song
+        song.instance_variable_set(:@genre, genre)
 
         expect(genre.songs).to include(song)
       end
@@ -67,6 +60,12 @@ describe "Associations — Song and Genre:" do
       it "invokes #genre= instead of simply assigning to a @genre instance variable to ensure that associations are created upon initialization" do
         artist = Artist.new("Neutral Milk Hotel")
 
+        expect_any_instance_of(Song).to receive(:genre=).with(genre)
+        Song.new("In the Aeroplane Over the Sea", artist, genre)
+      end
+    end
+  end
+end
         expect_any_instance_of(Song).to receive(:genre=).with(genre)
         Song.new("In the Aeroplane Over the Sea", artist, genre)
       end
